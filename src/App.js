@@ -56,7 +56,8 @@ function App() {
       }
     } catch (error) {
       console.error('API Error:', error);
-      showStatus('error', '❌', 'خطأ في الاتصال', 'تأكد من تشغيل الخادم');
+      const errorMessage = error.message || 'تأكد من تشغيل الخادم';
+      showStatus('error', '❌', 'خطأ في الاتصال', errorMessage);
       setTimeout(() => {
         setIsPaused(false);
       }, 3000);
@@ -117,7 +118,8 @@ function App() {
       }
     } catch (error) {
       console.error('API Error:', error);
-      showStatus('error', '❌', 'خطأ في الاتصال', 'تأكد من تشغيل الخادم');
+      const errorMessage = error.message || 'تأكد من تشغيل الخادم';
+      showStatus('error', '❌', 'خطأ في الاتصال', errorMessage);
     }
   };
 
