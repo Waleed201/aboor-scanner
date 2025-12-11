@@ -1,0 +1,40 @@
+#reader {
+  border: 3px solid #0d8191;
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 20px;
+}
+
+#reader video {
+  transform: scaleX(-1);
+  -webkit-transform: scaleX(-1);
+}
+
+.manual-input-section {
+  background: #f8fafc;
+  padding: 15px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+.manual-input-section label {
+  display: block;
+  margin-bottom: 8px;
+  color: #64748b;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.manual-input-section input {
+  width: 100%;
+  padding: 10px;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+
+.manual-input-section input:focus {
+  outline: none;
+  border-color: #0d8191;
+}

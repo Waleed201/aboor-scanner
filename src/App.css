@@ -1,0 +1,119 @@
+.container {
+  max-width: 600px;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 20px;
+  padding: 30px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  color: #1a1a1a;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 3px solid #0d8191;
+}
+
+.header h1 {
+  font-size: 28px;
+  color: #073942;
+  margin-bottom: 10px;
+}
+
+.header .subtitle {
+  color: #666;
+  font-size: 14px;
+}
+
+.instruction {
+  text-align: center;
+  padding: 15px;
+  background: #eff6ff;
+  border-radius: 10px;
+  margin: 15px 0;
+  color: #1e40af;
+  font-weight: 600;
+  border-left: 4px solid #3b82f6;
+}
+
+.hidden {
+  display: none;
+}
+
+.button {
+  width: 100%;
+  padding: 16px;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 20px;
+}
+
+.button-primary {
+  background: linear-gradient(135deg, #073942 0%, #0d8191 100%);
+  color: white;
+}
+
+.button-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(7, 57, 66, 0.4);
+}
+
+.button-secondary {
+  background: #e2e8f0;
+  color: #073942;
+}
+
+.button-secondary:hover {
+  background: #cbd5e0;
+}
+
+.countdown {
+  text-align: center;
+  font-size: 48px;
+  font-weight: bold;
+  color: #0d8191;
+  margin: 20px 0;
+}
+
+.qr-display {
+  text-align: center;
+  padding: 15px;
+  background: #1f2937;
+  border-radius: 10px;
+  color: #10b981;
+  font-family: 'Courier New', monospace;
+  font-size: 16px;
+  word-break: break-all;
+  margin: 10px 0;
+}
+
+.scanning-tips {
+  background: #fef3c7;
+  border: 2px solid #f59e0b;
+  border-radius: 10px;
+  padding: 15px;
+  margin: 15px 0;
+  font-size: 13px;
+  color: #92400e;
+}
+
+.scanning-tips h4 {
+  margin: 0 0 10px 0;
+  font-size: 14px;
+  color: #78350f;
+}
+
+.scanning-tips ul {
+  margin: 0;
+  padding-right: 20px;
+  text-align: right;
+}
+
+.scanning-tips li {
+  margin: 5px 0;
+}

@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  scanner:
+    build:
+      context: .
+      args:
+        REACT_APP_API_URL: ${REACT_APP_API_URL:-http://localhost:5001}
+    ports:
+      - "3001:80"
+    environment:
+      - NODE_ENV=production
+    restart: unless-stopped
+    container_name: aboor-scanner
+    networks:
+      - aboor-network
+
+networks:
+  aboor-network:
+    driver: bridge
