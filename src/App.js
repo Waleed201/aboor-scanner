@@ -17,7 +17,7 @@ function App() {
   const [scannedQRCode, setScannedQRCode] = useState('');
   const [showManualInput, setShowManualInput] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
-  const [apiUrl, setApiUrl] = useState(process.env.REACT_APP_API_URL || 'http://localhost:5001');
+  const [apiUrl, setApiUrl] = useState(process.env.REACT_APP_API_URL || 'https://aboor-backend.onrender.com');
 
   const showStatus = (type, icon, message, details) => {
     setStatus({ show: true, type, icon, message, details });

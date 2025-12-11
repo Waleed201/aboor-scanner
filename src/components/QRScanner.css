@@ -5,9 +5,10 @@
   margin-bottom: 20px;
 }
 
+/* Video no longer mirrored for better QR scanning */
 #reader video {
-  transform: scaleX(-1);
-  -webkit-transform: scaleX(-1);
+  /* transform: scaleX(-1); - Removed to prevent left-right flip */
+  /* -webkit-transform: scaleX(-1); - Removed to prevent left-right flip */
 }
 
 .manual-input-section {
