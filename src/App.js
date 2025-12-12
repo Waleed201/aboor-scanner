@@ -18,6 +18,8 @@ function App() {
   const [showManualInput, setShowManualInput] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
   const [apiUrl, setApiUrl] = useState(process.env.REACT_APP_API_URL || 'https://aboor-backend.onrender.com');
+  const [autoResetCountdown, setAutoResetCountdown] = useState(null);
+  const [timeoutWarning, setTimeoutWarning] = useState(false);
 
   const showStatus = (type, icon, message, details) => {
     setStatus({ show: true, type, icon, message, details });
@@ -81,8 +83,41 @@ function App() {
         setCurrentStep(3);
         showStatus('waiting', '📱', 'جاهز للمسح الثاني', 'اطلب إظهار الرمز الجديد');
         setIsPaused(false);
+        
+        // Start timeout warning after 30 seconds
+        startTimeoutWarning(30);
       }
     }, 1000);
+  };
+
+  const startAutoReset = (seconds) => {
+    let count = seconds;
+    setAutoResetCountdown(count);
+    
+    const interval = setInterval(() => {
+      count--;
+      if (count > 0) {
+        setAutoResetCountdown(count);
+      } else {
+        clearInterval(interval);
+        setAutoResetCountdown(null);
+        resetScanner();
+      }
+    }, 1000);
+  };
+
+  const startTimeoutWarning = (seconds) => {
+    setTimeout(() => {
+      if (currentStep === 3 && !timeoutWarning) {
+        setTimeoutWarning(true);
+        showStatus('warning', '⏰', 'تحذير: انتهت مهلة المستخدم', 'يرجى إعادة المسح من البداية');
+        
+        // Auto-reset after 10 more seconds
+        setTimeout(() => {
+          resetScanner();
+        }, 10000);
+      }
+    }, seconds * 1000);
   };
 
   const handleSecondScan = async (qrCode) => {
@@ -113,6 +148,9 @@ function App() {
         showStatus('success', '🎉', 'تم السماح بالدخول!', `مرحباً ${result.data.user?.name || 'بك'}`);
         setTicketData(prev => ({ ...prev, ...result.data }));
         setInstruction('✅ تم التحقق بنجاح - يمكن للمستخدم الدخول');
+        
+        // Auto-reset after 5 seconds
+        startAutoReset(5);
       } else {
         showStatus('error', '❌', 'فشل التحقق', result.message || 'رمز غير صالح');
       }
@@ -135,6 +173,7 @@ function App() {
   };
 
   const resetScanner = () => {
+    console.log('🔄 Resetting scanner to initial state');
     setCurrentStep(1);
     setScannedQR1(null);
     setTicketData(null);
@@ -143,6 +182,8 @@ function App() {
     setCountdown(null);
     setScannedQRCode('');
     setIsPaused(false);
+    setAutoResetCountdown(null);
+    setTimeoutWarning(false);
   };
 
   const toggleManualInput = () => {
@@ -196,13 +237,19 @@ function App() {
         <div className="countdown">{countdown}</div>
       )}
 
+      {autoResetCountdown !== null && (
+        <div className="countdown" style={{ color: '#10b981' }}>
+          إعادة تعيين تلقائية خلال: {autoResetCountdown}
+        </div>
+      )}
+
       {scannedQRCode && (
         <div className="qr-display">{scannedQRCode}</div>
       )}
 
       <TicketInfo ticketData={ticketData} />
 
-      {(status.type === 'success' || status.type === 'error') && currentStep === 3 && (
+      {(status.type === 'success' || status.type === 'error' || timeoutWarning) && currentStep === 3 && (
         <button className="button button-secondary" onClick={resetScanner}>
           🔄 فحص تذكرة جديدة
         </button>
