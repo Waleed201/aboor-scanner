@@ -5,7 +5,7 @@ import StatusCard from './components/StatusCard';
 import TicketInfo from './components/TicketInfo';
 import StepIndicator from './components/StepIndicator';
 import ConfigSection from './components/ConfigSection';
-import { switchQR, verifySecondaryQR } from './services/api';
+import { switchQR, verifySecondaryQR, verifyQR1, verifyQR2, detectQRType } from './services/api';
 
 function App() {
   const [currentStep, setCurrentStep] = useState(1);
@@ -42,8 +42,25 @@ function App() {
     
     setScannedQR1(qrString);
     
+    // Detect QR code type
+    const qrType = detectQRType(qrString);
+    console.log('🔍 Detected QR Type:', qrType, 'for code:', qrString);
+    
     try {
-      const result = await switchQR(qrString, apiUrl);
+      let result;
+      
+      // Call the appropriate API based on QR code type
+      if (qrType === 'qr1') {
+        console.log('📱 Calling verify-qr1 endpoint');
+        result = await verifyQR1(qrString, apiUrl);
+      } else if (qrType === 'qr2') {
+        console.log('📱 Calling verify-qr2 endpoint');
+        result = await verifyQR2(qrString, apiUrl);
+      } else {
+        // Fallback to legacy endpoint for unknown format
+        console.log('📱 Calling legacy switch-qr endpoint');
+        result = await switchQR(qrString, apiUrl);
+      }
       
       if (result.success) {
         setTicketData(result.data);
@@ -141,8 +158,25 @@ function App() {
       return;
     }
     
+    // Detect QR code type
+    const qrType = detectQRType(qrString);
+    console.log('🔍 Detected QR Type for second scan:', qrType, 'for code:', qrString);
+    
     try {
-      const result = await verifySecondaryQR(qrString, apiUrl);
+      let result;
+      
+      // Call the appropriate API based on QR code type
+      if (qrType === 'qr1') {
+        console.log('📱 Calling verify-qr1 endpoint');
+        result = await verifyQR1(qrString, apiUrl);
+      } else if (qrType === 'qr2') {
+        console.log('📱 Calling verify-qr2 endpoint');
+        result = await verifyQR2(qrString, apiUrl);
+      } else {
+        // Fallback to legacy endpoint for unknown format
+        console.log('📱 Calling legacy verify-secondary-qr endpoint');
+        result = await verifySecondaryQR(qrString, apiUrl);
+      }
       
       if (result.success) {
         showStatus('success', '🎉', 'تم السماح بالدخول!', `مرحباً ${result.data.user?.name || 'بك'}`);
