@@ -12,7 +12,7 @@ function App() {
   const [scannedQR1, setScannedQR1] = useState(null);
   const [ticketData, setTicketData] = useState(null);
   const [status, setStatus] = useState({ show: false, type: '', icon: '', message: '', details: '' });
-  const [instruction, setInstruction] = useState('📱 اطلب من المستخدم إظهار رمز التذكرة');
+  const [instruction, setInstruction] = useState('📱 جاهز لمسح التذكرة');
   const [countdown, setCountdown] = useState(null);
   const [scannedQRCode, setScannedQRCode] = useState('');
   const [showManualInput, setShowManualInput] = useState(false);
@@ -27,7 +27,7 @@ function App() {
 
   const handleFirstScan = async (qrCode) => {
     setCurrentStep(1);
-    showStatus('waiting', '⏳', 'جاري التحقق من الرمز الأول...', '');
+    showStatus('waiting', '⏳', 'جاري التحقق...', '');
     
     // Extract QR code from JSON if needed
     let qrString = qrCode;
@@ -64,7 +64,7 @@ function App() {
       
       if (result.success) {
         setTicketData(result.data);
-        showStatus('success', '✅', 'تم التحقق من الرمز الأول!', 'انتظر تحديث التطبيق...');
+        showStatus('success', '✅', 'تم المسح', 'QR Code 1 verified');
         setCurrentStep(2);
         startCountdown();
       } else {
@@ -76,7 +76,7 @@ function App() {
     } catch (error) {
       console.error('API Error:', error);
       const errorMessage = error.message || 'تأكد من تشغيل الخادم';
-      showStatus('error', '❌', 'خطأ في الاتصال', errorMessage);
+      showStatus('error', '❌', 'خطأ', errorMessage);
       setTimeout(() => {
         setIsPaused(false);
       }, 3000);
@@ -84,7 +84,7 @@ function App() {
   };
 
   const startCountdown = () => {
-    setInstruction('⏳ انتظر تحديث التطبيق ثم اطلب الرمز الجديد');
+    setInstruction('⏳ انتظر قليلاً...');
     
     let count = 3;
     setCountdown(count);
@@ -96,9 +96,9 @@ function App() {
       } else {
         clearInterval(interval);
         setCountdown(null);
-        setInstruction('👉 اطلب من المستخدم إظهار الرمز الجديد (QR Code 2)');
+        setInstruction('👉 جاهز لمسح QR Code 2');
         setCurrentStep(3);
-        showStatus('waiting', '📱', 'جاهز للمسح الثاني', 'اطلب إظهار الرمز الجديد');
+        showStatus('waiting', '📱', 'جاهز للمسح الثاني', 'Scan QR Code 2');
         setIsPaused(false);
         
         // Start timeout warning after 30 seconds
@@ -127,7 +127,7 @@ function App() {
     setTimeout(() => {
       if (currentStep === 3 && !timeoutWarning) {
         setTimeoutWarning(true);
-        showStatus('warning', '⏰', 'تحذير: انتهت مهلة المستخدم', 'يرجى إعادة المسح من البداية');
+        showStatus('warning', '⏰', 'انتهت المهلة', 'Timeout - please rescan');
         
         // Auto-reset after 10 more seconds
         setTimeout(() => {
@@ -139,7 +139,7 @@ function App() {
 
   const handleSecondScan = async (qrCode) => {
     setCurrentStep(3);
-    showStatus('waiting', '⏳', 'جاري التحقق من الرمز الثاني...', '');
+    showStatus('waiting', '⏳', 'جاري التحقق...', '');
     
     // Extract QR code from JSON if needed
     let qrString = qrCode;
@@ -154,7 +154,7 @@ function App() {
     
     // Check if same as first QR (screenshot detection!)
     if (qrString === scannedQR1) {
-      showStatus('error', '🚨', 'احتيال! لقطة شاشة محتملة', 'الرمز لم يتغير - تنبيه الأمن');
+      showStatus('error', '🚨', 'خطأ', 'Same QR code scanned');
       return;
     }
     
@@ -179,19 +179,19 @@ function App() {
       }
       
       if (result.success) {
-        showStatus('success', '🎉', 'تم السماح بالدخول!', `مرحباً ${result.data.user?.name || 'بك'}`);
+        showStatus('success', '✅', 'تم الدخول', 'Entry granted');
         setTicketData(prev => ({ ...prev, ...result.data }));
-        setInstruction('✅ تم التحقق بنجاح - يمكن للمستخدم الدخول');
+        setInstruction('✅ يمكن الدخول الآن');
         
         // Auto-reset after 5 seconds
         startAutoReset(5);
       } else {
-        showStatus('error', '❌', 'فشل التحقق', result.message || 'رمز غير صالح');
+        showStatus('error', '❌', 'فشل', result.message || 'Invalid');
       }
     } catch (error) {
       console.error('API Error:', error);
       const errorMessage = error.message || 'تأكد من تشغيل الخادم';
-      showStatus('error', '❌', 'خطأ في الاتصال', errorMessage);
+      showStatus('error', '❌', 'خطأ', errorMessage);
     }
   };
 
@@ -212,7 +212,7 @@ function App() {
     setScannedQR1(null);
     setTicketData(null);
     setStatus({ show: false, type: '', icon: '', message: '', details: '' });
-    setInstruction('📱 اطلب من المستخدم إظهار رمز التذكرة');
+    setInstruction('📱 جاهز لمسح التذكرة');
     setCountdown(null);
     setScannedQRCode('');
     setIsPaused(false);
